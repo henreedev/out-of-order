@@ -18,13 +18,13 @@ func _physics_process(delta: float) -> void:
 			spawn_bug()
 
 func spawn_bug():
-	var spawn_pos = Vector2(0, randf_range(-Y_EXTENT, Y_EXTENT))
+	var spawn_pos = Vector2(0, randf_range(-Y_EXTENT, Y_EXTENT) + 36)
 	var bug = BUG.instantiate()
 	bug.position = spawn_pos
 	add_child(bug)
 	var tween := create_tween()
 	tween.tween_property(bug, "global_position:x", -4.0, 24.0)
 	tween.tween_callback(bug.queue_free)
-	var tween_2 := create_tween().set_loops()
-	tween_2.tween_property(bug, "position:y", -1.0, 0.5)
-	tween_2.tween_property(bug, "position:y", 1.0, 0.75)
+	#var tween_2 := create_tween().set_loops()
+	#tween_2.tween_property(bug, "position:y", -1.0, 0.5)
+	#tween_2.tween_property(bug, "position:y", 1.0, 0.75)

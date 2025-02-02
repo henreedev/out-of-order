@@ -47,6 +47,7 @@ const PLATFORMER_SCENE = preload("res://scenes/platformer.tscn")
 @onready var arcade_ambience: AudioStreamPlayer = $Machine/Sounds/ArcadeAmbience
 @onready var restart_label: Label = $RestartLabel
 @onready var coin_pwing: AudioStreamPlayer2D = $Machine/Sounds/CoinPwing
+@onready var dialogue: CanvasLayer = $Dialogue
 
 
 var orig_shader_mat : ShaderMaterial
@@ -76,18 +77,53 @@ var volume_tween : Tween
 
 var effect_tweens : Array[Tween]
 
+const win_lines := [
+	"well, i'll be.\nnever heard it sing like that. nice job, kid.",
+	"that darned high score, eh. never thought i'd see the day.",
+	"huh. it'll be sad to see her go.",
+	"you know, kid...\nwe still have to throw it away today. take your time."
+]
+
+const lose_lines := [
+	"told ya. it's broken. let's go.",
+	"thing's a piece of junk. let's get it out of here.",
+	"i put the sign there for a reason.",
+	"don't break the old thing.",
+	"we're closed. gotta leave, kid.",
+]
+
+const one_min_lines := [
+	"seriously, we gotta go.",
+	"time to go.",
+	"hurry it up.",
+	"no point in trying for that high score. hurry up.",
+]
+
+const intro_lines := [
+	"hey, i'm clearing that one out today. give it one last shot.",
+	"kid, leave that old thing alone. it's been through enough.",
+	"that old thing? today's it's last day.",
+	"we're closing shop in three minutes.",
+	"last chance before that thing goes to the antique store.",
+	"good luck beating that high score. been there for years.",
+]
+
 const MAX_COINS_HELD = 6 
 var coins_to_pick := 2
 var available_coin_positions : Array[Vector2]
 var coin_insert_satisfied := false
+
+var said_one_min_line = false
+var said_intro_line = false
 
 const INSERT_TEXT = "INSERT COIN"
 const INSERT_TEXT_CONTINUE = "INSERT COIN\nTO CONTINUE"
 
 func _ready() -> void:
 	inst = self
-	shader_mat = shader_mat.duplicate()
+	shaders.material = shader_mat.duplicate()
 	orig_shader_mat = shader_mat.duplicate()
+	shader_mat = shaders.material
 	grab_coin_positions_and_delete()
 	play_intro()
 	blink_insert_label()
@@ -171,6 +207,9 @@ func act_on_state(delta: float):
 			if intro_done:
 				if Input.is_action_just_pressed("dash"):
 					sign.play("raise")
+					if not said_intro_line:
+						said_intro_line = true
+						TextBox.display_dialogue(intro_lines.pick_random())
 		State.IN_GAME:
 			tick_timer(delta)
 			if Input.is_action_just_pressed("dash"):
@@ -268,27 +307,30 @@ func transition_to_state(new_state : State):
 func tick_timer(delta):
 	game_timer = maxf(game_timer - delta, 0)
 	timer_label.text = str(int(game_timer + 1) / 60) + ":" + str(int(game_timer + 1) % 60).pad_zeros(2)
+	if not said_one_min_line and int(game_timer + 1) / 60 == 0:
+		said_one_min_line = true
+		TextBox.display_dialogue(one_min_lines.pick_random())
 	if game_timer <= 0:
 		timer_label.text = "0:00"
 		lose()
 
 func win():
 	transition_to_state(State.END)
-	# TODO trigger dialogue
+	TextBox.display_dialogue(win_lines.pick_random())
 	var tween := create_tween()
 	tween.tween_interval(2.5)
 	tween.tween_callback(victory_theme.play)
 	tween.tween_property(high_score_label, "position", Vector2(-31, -7), 3.0)
 	tween.tween_interval(0.5)
 	tween.tween_property(high_score_label, "text", "HIGH SCORE 9999", 0.0)
-	tween.tween_interval(30)
+	tween.tween_interval(60)
 	tween.tween_property(self, "modulate", Color.BLACK, 2.0).set_trans(Tween.TRANS_CUBIC)
 	tween.parallel().tween_callback(fade_volume_to_db.bind(-30))
 	tween.tween_callback(get_tree().reload_current_scene).set_delay(2.0)
 
 func lose():
 	transition_to_state(State.END)
-	# TODO trigger dialogue
+	TextBox.display_dialogue(lose_lines.pick_random())
 	sign.play("lower")
 	var tween := create_tween()
 	tween.tween_interval(4.0)

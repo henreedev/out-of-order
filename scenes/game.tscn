@@ -212,7 +212,7 @@ animations = [{
 "duration": 1.3,
 "texture": SubResource("AtlasTexture_e1j6l")
 }, {
-"duration": 1.0,
+"duration": 40.0,
 "texture": SubResource("AtlasTexture_pl11u")
 }],
 "loop": false,
@@ -456,9 +456,7 @@ horizontal_alignment = 2
 
 [node name="Sign" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_5newe")
-animation = &"lower"
-frame = 7
-frame_progress = 1.0
+animation = &"raise"
 metadata/_edit_lock_ = true
 
 [node name="RestartLabel" type="Label" parent="."]
@@ -497,6 +495,8 @@ animation = &"on_table"
 [node name="Coin2" parent="." instance=ExtResource("9_0tnpc")]
 position = Vector2(19, 27)
 animation = &"on_table"
+
+[node name="Dialogue" type="CanvasLayer" parent="."]
 
 [connection signal="pressed" from="PocketButton" to="." method="_on_pocket_button_pressed"]
 [connection signal="animation_finished" from="Sign" to="." method="_on_sign_animation_finished"]

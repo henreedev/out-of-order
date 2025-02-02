@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://bq1jl3gt2wqce"]
+
+[ext_resource type="Script" uid="uid://dvuigoo3be6bc" path="res://scripts/text_box.gd" id="1_wscpg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0dhrm"]
+content_margin_left = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.203922, 0.203922, 0.203922, 0.129412)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 0.364706)
+border_blend = true
+anti_aliasing = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_wscpg"]
+line_spacing = -5.0
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(-1, 1)
+
+[node name="TextBox" type="Label"]
+z_index = 2
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 21.0
+grow_horizontal = 2
+size_flags_vertical = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_0dhrm")
+text = "well, i'll be."
+label_settings = SubResource("LabelSettings_wscpg")
+autowrap_mode = 3
+justification_flags = 227
+script = ExtResource("1_wscpg")
