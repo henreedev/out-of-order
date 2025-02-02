@@ -1,0 +1,118 @@
+[gd_scene load_steps=12 format=3 uid="uid://dgr6j6ylwvpay"]
+
+[ext_resource type="Texture2D" uid="uid://380gf65cx0e5" path="res://assets/image/coin.png" id="1_rwqht"]
+[ext_resource type="Script" uid="uid://diptjnmuly0u0" path="res://scripts/coin.gd" id="2_i64fm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i64fm"]
+atlas = ExtResource("1_rwqht")
+region = Rect2(0, 36, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_11l1o"]
+atlas = ExtResource("1_rwqht")
+region = Rect2(0, 12, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d14el"]
+atlas = ExtResource("1_rwqht")
+region = Rect2(0, 24, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ikuy"]
+atlas = ExtResource("1_rwqht")
+region = Rect2(0, 0, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wnlwo"]
+atlas = ExtResource("1_rwqht")
+region = Rect2(0, 24, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jig8b"]
+atlas = ExtResource("1_rwqht")
+region = Rect2(0, 12, 12, 12)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xmuha"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i64fm")
+}],
+"loop": false,
+"name": &"full",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_11l1o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d14el")
+}],
+"loop": false,
+"name": &"hover",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ikuy")
+}],
+"loop": false,
+"name": &"on_table",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wnlwo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jig8b")
+}],
+"loop": false,
+"name": &"unhover",
+"speed": 6.0
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_i64fm"]
+font_color = Color(0.93, 0.93, 0.93, 1)
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_11l1o"]
+font_color = Color(0.93, 0.93, 0.93, 1)
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Coin" type="AnimatedSprite2D" groups=["coin"]]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_xmuha")
+animation = &"unhover"
+autoplay = "full"
+script = ExtResource("2_i64fm")
+
+[node name="Button" type="Button" parent="."]
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="NameLabel" type="Label" parent="."]
+visible = false
+offset_left = -51.0
+offset_top = -17.0
+offset_right = 55.0
+offset_bottom = -4.0
+text = "Skibidi Rizzler"
+label_settings = SubResource("LabelSettings_i64fm")
+horizontal_alignment = 1
+
+[node name="MultLabel" type="Label" parent="."]
+visible = false
+offset_left = -13.0
+offset_top = 2.0
+offset_right = 13.0
+offset_bottom = 15.0
+text = "x1.0"
+label_settings = SubResource("LabelSettings_11l1o")
+horizontal_alignment = 1
+
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

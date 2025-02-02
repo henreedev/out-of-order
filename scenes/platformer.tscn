@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmhdovyhrv81r"]
+
+[ext_resource type="Script" uid="uid://ddrjtjf455vkl" path="res://scripts/platformer.gd" id="1_85uu4"]
+[ext_resource type="PackedScene" uid="uid://bvqaswcsxqq47" path="res://scenes/map.tscn" id="1_j2uy2"]
+[ext_resource type="PackedScene" uid="uid://5qlwvifqm4xp" path="res://scenes/player.tscn" id="2_85uu4"]
+
+[node name="Platformer" type="Node2D"]
+script = ExtResource("1_85uu4")
+
+[node name="Map" parent="." instance=ExtResource("1_j2uy2")]
+
+[node name="Player" parent="." instance=ExtResource("2_85uu4")]
+position = Vector2(2, 36)

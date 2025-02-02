@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://c4igxeib85c7n"]
+
+[ext_resource type="Texture2D" uid="uid://7nixc8edoqv6" path="res://assets/image/button-ss.png" id="1_mi6dp"]
+[ext_resource type="Script" uid="uid://b7dfdn6gebx4x" path="res://scripts/button.gd" id="2_rhj8v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rhj8v"]
+atlas = ExtResource("1_mi6dp")
+region = Rect2(0, 0, 10, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3q610"]
+atlas = ExtResource("1_mi6dp")
+region = Rect2(10, 0, 10, 6)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_i7y4x"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rhj8v")
+}],
+"loop": false,
+"name": &"pressed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3q610")
+}],
+"loop": false,
+"name": &"unpressed",
+"speed": 5.0
+}]
+
+[node name="Button" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_i7y4x")
+animation = &"unpressed"
+autoplay = "unpressed"
+script = ExtResource("2_rhj8v")
