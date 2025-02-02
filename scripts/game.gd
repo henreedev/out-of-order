@@ -37,8 +37,21 @@ const PLATFORMER_SCENE = preload("res://scenes/platformer.tscn")
 @onready var shaders: ColorRect = $Shaders
 @onready var shader_mat: ShaderMaterial = $Shaders.material
 @onready var timer_label: Label = $TimerLabel
+# Sounds
+@onready var coin_pickup: AudioStreamPlayer = $Machine/Sounds/CoinPickup
+@onready var button_press: AudioStreamPlayer2D = $Machine/Sounds/ButtonPress
+@onready var joystick_hit: AudioStreamPlayer2D = $Machine/Sounds/JoystickHit
+@onready var room_noise: AudioStreamPlayer = $Machine/Sounds/RoomNoise
+@onready var game_music: AudioStreamPlayer = $Machine/Sounds/GameMusic
+@onready var victory_theme: AudioStreamPlayer = $Machine/Sounds/VictoryTheme
+@onready var arcade_ambience: AudioStreamPlayer = $Machine/Sounds/ArcadeAmbience
+@onready var restart_label: Label = $RestartLabel
+@onready var coin_pwing: AudioStreamPlayer2D = $Machine/Sounds/CoinPwing
+
 
 var orig_shader_mat : ShaderMaterial
+
+var showing_restart_prompt := false
 
 ## A singleton instance.
 static var inst : Game
@@ -52,11 +65,14 @@ var score := 0
 var score_multiplier := 1.0
 
 var intro_done := false
+var restarting := false
+var restart_tween : Tween
 
-const START_TIME := 1.0
+const START_TIME := 180.0
 var game_timer := START_TIME
 
 var joystick_tween : Tween
+var volume_tween : Tween 
 
 var effect_tweens : Array[Tween]
 
@@ -70,6 +86,7 @@ const INSERT_TEXT_CONTINUE = "INSERT COIN\nTO CONTINUE"
 
 func _ready() -> void:
 	inst = self
+	shader_mat = shader_mat.duplicate()
 	orig_shader_mat = shader_mat.duplicate()
 	grab_coin_positions_and_delete()
 	play_intro()
@@ -93,6 +110,8 @@ func grab_coin_positions_and_delete():
 			coin.queue_free()
 
 func play_intro():
+	fade_volume_to_db(0)
+	
 	var intro_tween := create_tween()
 	
 	const FADE_IN = 2.0
@@ -119,6 +138,29 @@ func _input(event) -> void:
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 			#Input.mouse_mode = Input.MOUSE_MODE_CONFINED
+	if event.is_action_pressed("restart"):
+		if not showing_restart_prompt:
+			show_restart_prompt()
+		else:
+			restart()
+
+func restart():
+	if not restarting:
+		restarting = true
+		
+		if restart_tween: 
+			restart_tween.kill()
+		
+		restart_tween = create_tween()
+		restart_tween.tween_property(restart_label, "position:y", -70, 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+		
+		transition_to_state(State.END)
+		sign.play("lower")
+		var tween := create_tween()
+		tween.tween_property(self, "modulate", Color.BLACK, 2.0).set_trans(Tween.TRANS_CUBIC)
+		tween.parallel().tween_callback(fade_volume_to_db.bind(-30))
+		tween.tween_callback(get_tree().reload_current_scene).set_delay(2.0)
+
 
 func _physics_process(delta: float) -> void:
 	act_on_state(delta)
@@ -133,11 +175,15 @@ func act_on_state(delta: float):
 			tick_timer(delta)
 			if Input.is_action_just_pressed("dash"):
 				dash_button.press()
+				button_press.pitch_scale = randf_range(1.2, 1.3)
+				button_press.play(0.06)
 			if Input.is_action_just_released("dash"):
 				dash_button.release()
 			
 			if Input.is_action_just_pressed("jump"):
 				jump_button.press()
+				button_press.pitch_scale = randf_range(1.2, 1.3)
+				button_press.play(0.06)
 			if Input.is_action_just_released("jump"):
 				jump_button.release()
 			
@@ -173,6 +219,7 @@ func transition_to_state(new_state : State):
 		State.INTRO:
 			pass
 		State.IN_GAME:
+			game_music.play()
 			start_new_game()
 			game_score_label.show()
 			multiplier_label.show()
@@ -180,6 +227,7 @@ func transition_to_state(new_state : State):
 				coin.interactable = false
 			ready_label.hide()
 		State.PICKING_COINS:
+			game_music.stop()
 			rotate_joystick_to(0)
 			dash_button.release()
 			jump_button.release()
@@ -205,12 +253,17 @@ func transition_to_state(new_state : State):
 			coin_insert_satisfied = false
 			pick_num_label.create_tween().tween_property(pick_num_label, "modulate", Color.TRANSPARENT, 0.6).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		State.END:
+			game_music.stop()
+			rotate_joystick_to(0)
+			dash_button.release()
+			jump_button.release()
 			hide_pocket()
 			for coin : Coin in get_tree().get_nodes_in_group("coin"):
 				coin.interactable = false
 			for tween in effect_tweens:
 				if tween:
 					tween.kill()
+			Player.time_scale = 0.0
 
 func tick_timer(delta):
 	game_timer = maxf(game_timer - delta, 0)
@@ -223,12 +276,15 @@ func win():
 	transition_to_state(State.END)
 	# TODO trigger dialogue
 	var tween := create_tween()
-	tween.tween_interval(5.0)
+	tween.tween_interval(2.5)
+	tween.tween_callback(victory_theme.play)
 	tween.tween_property(high_score_label, "position", Vector2(-31, -7), 3.0)
-	tween.tween_interval(0.0)
-	tween.tween_property(high_score_label, "text", "9999", 0.0)
+	tween.tween_interval(0.5)
+	tween.tween_property(high_score_label, "text", "HIGH SCORE 9999", 0.0)
+	tween.tween_interval(30)
 	tween.tween_property(self, "modulate", Color.BLACK, 2.0).set_trans(Tween.TRANS_CUBIC)
-	tween.tween_callback(get_tree().reload_current_scene)
+	tween.parallel().tween_callback(fade_volume_to_db.bind(-30))
+	tween.tween_callback(get_tree().reload_current_scene).set_delay(2.0)
 
 func lose():
 	transition_to_state(State.END)
@@ -237,7 +293,17 @@ func lose():
 	var tween := create_tween()
 	tween.tween_interval(4.0)
 	tween.tween_property(self, "modulate", Color.BLACK, 2.0).set_trans(Tween.TRANS_CUBIC)
-	tween.tween_callback(get_tree().reload_current_scene)
+	tween.parallel().tween_callback(fade_volume_to_db.bind(-30))
+	tween.tween_callback(get_tree().reload_current_scene).set_delay(2.0)
+
+func fade_volume_to_db(db : float):
+	if volume_tween:
+		volume_tween.kill()
+	volume_tween = create_tween()
+	volume_tween.tween_method(set_vol, AudioServer.get_bus_volume_db(0), db, 2.0).set_trans(Tween.TRANS_CUBIC)
+
+func set_vol(db : float):
+	AudioServer.set_bus_volume_db(0, db)
 
 func prompt_pocket_after_delay():
 	insert_label.modulate.a = 1
@@ -278,6 +344,7 @@ func add_score(amount : int):
 	amount *= score_multiplier
 	score = mini(score + amount, MAX_SCORE)
 	game_score_label.text = str(score).pad_zeros(4)
+	coin_pickup.play()
 
 func draw_coins():
 	# Draw the coins
@@ -325,6 +392,9 @@ func insert_coin(coin : Coin):
 	tween.chain().tween_callback(coin.queue_free) # TODO add an insert sound here
 
 func put_coin_on_table(coin : Coin):
+	coin_pwing.position = coin.position * 5
+	coin_pwing.pitch_scale = randf_range(0.95, 1.05)
+	coin_pwing.play()
 	var tween := create_tween()
 	table_coins.append(coin)
 	coin.interactable = false
@@ -374,6 +444,13 @@ func win_platformer():
 	add_score(500)
 	platformer.player.die()
 
+func show_restart_prompt():
+	showing_restart_prompt = true
+	restart_tween = create_tween()
+	restart_tween.tween_property(restart_label, "position", Vector2(-100, -48), 0.7).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	restart_tween.tween_property(restart_label, "position", Vector2(-100, -68), 2.0).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	restart_tween.tween_property(self, "showing_restart_prompt", false, 0.0)
+
 func apply_coin_effect(coin : Coin):
 	coin.apply_effect()
 
@@ -383,6 +460,9 @@ func rotate_joystick_to(angle):
 	joystick_tween = create_tween()
 	var is_elastic = randf() < 0.4
 	joystick_tween.tween_property(joystick, "rotation", angle, 0.55 if is_elastic else 0.35).set_trans(Tween.TRANS_ELASTIC if is_elastic else Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	if angle != 0:
+		joystick_hit.pitch_scale = randf_range(0.9, 1.1)
+		joystick_hit.play()
 
 func do_lag():
 	var lag_tween := create_tween()

@@ -12,11 +12,15 @@ func _ready() -> void:
 	Game.inst.new_game_created.emit(self)
 
 func get_spikes():
-	return map.get_child(1) # FIXME scuffed
+	for child in map.get_children():
+		if child is Spikes:
+			return child
 func get_coins():
 	return map.get_child(0) # FIXME scuffed
 func get_bugs():
-	return map.get_child(3) # FIXME scuffed
+	for child in map.get_children():
+		if child is BugSpawner:
+			return child
 
 func start():
 	running = true

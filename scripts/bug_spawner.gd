@@ -25,6 +25,6 @@ func spawn_bug():
 	var tween := create_tween()
 	tween.tween_property(bug, "global_position:x", -4.0, 24.0)
 	tween.tween_callback(bug.queue_free)
-	var tween_2 := create_tween().set_loops
-	tween.tween_property(bug, "position:y", -1.0, 0.5)
-	tween.tween_property(bug, "position:y", 1.0, 0.75)
+	var tween_2 := create_tween().set_loops()
+	tween_2.tween_property(bug, "position:y", -1.0, 0.5)
+	tween_2.tween_property(bug, "position:y", 1.0, 0.75)
