@@ -4,31 +4,46 @@ class_name Player
 
 signal died
 
-const SPEED = 65.0
+const BASE_SPEED = 65.0
+static var dash_mod = 1.0
+static var reversed_controls := false
+static var speed = BASE_SPEED
+static var random_speed_mod = 1.0
+static var time_scale = 1.0
+static var lag_time_scale = 1.0
 
+const GRAVITY = 150.0
+static var gravity = GRAVITY
 const JUMP_BUFFER = 1.0
 var jump_buffer_timer := 0.0
 const COYOTE_TIME = 0.1
 var coyote_timer := 0.0
 const DASH_COOLDOWN = 2.0
 var dash_cooldown_timer := 0.0
-const JUMP_STR = 70.0
+const JUMP_STR = 75.0
 const JUMP_FLOAT_STR = 0.5
 const JUMP_FLOAT_SPD = 5.0
-const GRAVITY = 150.0
 
 var on_floor := false
 var dead := false
 @onready var asprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var arrow_holder: Node2D = $ArrowHolder
+@onready var arrow: Sprite2D = $ArrowHolder/Arrow
+@onready var camera: Camera2D = $Camera2D
 
 func _physics_process(delta: float) -> void:
-	if dead: return
+	if dead: 
+		return
+	delta *= time_scale
+	delta *= lag_time_scale
+	if delta == 0:
+		return
 	
 	_tick_timers(delta)
 	_check_floor_status()
 	
 	# Vertical movement
-	var grav = GRAVITY
+	var grav = gravity
 	
 	if Input.is_action_just_pressed("jump"):
 		_try_jump()
@@ -46,13 +61,16 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += grav * delta
 	
+	arrow.modulate.a = 1 - sqrt(dash_cooldown_timer / DASH_COOLDOWN)
+	arrow_holder.rotation = get_local_mouse_position().angle()
+	
 	if Input.is_action_just_pressed("dash"):
 		try_dash()
 	
 	# Hoz movement
-	var movement = Input.get_axis("move_left", "move_right") * SPEED
+	var movement = Input.get_axis("move_left", "move_right") * speed * random_speed_mod * (-1 if reversed_controls else 1)
 	var accel_mod = 1.0 if is_on_floor() else 0.6
-	var dist_to_max_speed = abs(SPEED - abs(velocity.x))
+	var dist_to_max_speed = abs(speed - abs(velocity.x))
 	
 	if dist_to_max_speed < 20 and movement * velocity.x > 0:
 		accel_mod *= 0.5
@@ -78,11 +96,11 @@ func _physics_process(delta: float) -> void:
 		if movement < 0:
 			asprite.flip_h = true
 			asprite.animation = "walk"
-			asprite.speed_scale = abs(velocity.x) / SPEED
+			asprite.speed_scale = abs(velocity.x) / speed
 		elif movement > 0:
 			asprite.flip_h = false
 			asprite.animation = "walk"
-			asprite.speed_scale = abs(velocity.x) / SPEED
+			asprite.speed_scale = abs(velocity.x) / speed
 		if abs(velocity.x) < 0.1:
 			asprite.play("idle")
 	else:
@@ -112,9 +130,9 @@ func _tick_timers(delta : float):
 func try_dash():
 	if not dash_cooldown_timer > 0:
 		var mouse_dir = get_local_mouse_position().normalized()
-		mouse_dir.x *= 1.5
+		mouse_dir.x *= 1.75
 		const STR = 75.0
-		velocity = mouse_dir * STR
+		velocity = mouse_dir * STR * dash_mod
 		dash_cooldown_timer = DASH_COOLDOWN
 
 func die():

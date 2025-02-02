@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://drhqjfxycqi5p"]
+[gd_scene load_steps=48 format=3 uid="uid://drhqjfxycqi5p"]
 
 [ext_resource type="Script" uid="uid://b2s8i286ohrbt" path="res://scripts/game.gd" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://m5fuhmge1kqg" path="res://assets/image/bg.png" id="2_iywne"]
@@ -8,6 +8,7 @@
 [ext_resource type="Shader" uid="uid://e5ywd8n633ma" path="res://scenes/screen_fx.gdshader" id="6_gee14"]
 [ext_resource type="Texture2D" uid="uid://lis3lsu6figr" path="res://assets/image/sign-ss.png" id="6_p57ef"]
 [ext_resource type="FontFile" uid="uid://c3ke05r37irw7" path="res://assets/font/m3x6.ttf" id="8_0tnpc"]
+[ext_resource type="Texture2D" uid="uid://cufye1igvsxl4" path="res://assets/image/arrow.png" id="8_vtaks"]
 [ext_resource type="PackedScene" uid="uid://dgr6j6ylwvpay" path="res://scenes/coin.tscn" id="9_0tnpc"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0tnpc"]
@@ -43,41 +44,68 @@ shader_parameter/clip_warp = false
 shader_parameter/vignette_intensity = 0.23
 shader_parameter/vignette_opacity = 1.0
 
-[sub_resource type="LabelSettings" id="LabelSettings_gee14"]
+[sub_resource type="LabelSettings" id="LabelSettings_kvpfn"]
+paragraph_spacing = -7.31
+font = ExtResource("8_0tnpc")
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_u5sy4"]
-atlas = ExtResource("6_p57ef")
-region = Rect2(0, 0, 160, 90)
+[sub_resource type="Gradient" id="Gradient_vtaks"]
+offsets = PackedFloat32Array(0.207792, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gee14"]
-atlas = ExtResource("6_p57ef")
-region = Rect2(0, 90, 160, 90)
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kvpfn"]
+gradient = SubResource("Gradient_vtaks")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.513761, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0tnpc"]
-atlas = ExtResource("6_p57ef")
-region = Rect2(0, 180, 160, 90)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vtaks"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kvpfn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dinhu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kvuet"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_trtic"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ir15t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ca42v"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rysoc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ssvqc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_264po"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1kice"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vtaks"]
+font_color = Color(0.74978, 0.74978, 0.74978, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vtaks"]
 atlas = ExtResource("6_p57ef")
-region = Rect2(0, 270, 160, 90)
+region = Rect2(0, 0, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kvpfn"]
 atlas = ExtResource("6_p57ef")
-region = Rect2(0, 360, 160, 90)
+region = Rect2(0, 90, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dinhu"]
 atlas = ExtResource("6_p57ef")
-region = Rect2(0, 450, 160, 90)
+region = Rect2(0, 180, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kvuet"]
 atlas = ExtResource("6_p57ef")
-region = Rect2(0, 540, 160, 90)
+region = Rect2(0, 270, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_trtic"]
 atlas = ExtResource("6_p57ef")
-region = Rect2(0, 540, 160, 90)
+region = Rect2(0, 360, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ir15t"]
 atlas = ExtResource("6_p57ef")
@@ -85,36 +113,47 @@ region = Rect2(0, 450, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ca42v"]
 atlas = ExtResource("6_p57ef")
-region = Rect2(0, 360, 160, 90)
+region = Rect2(0, 540, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rysoc"]
 atlas = ExtResource("6_p57ef")
-region = Rect2(0, 270, 160, 90)
+region = Rect2(0, 630, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ssvqc"]
 atlas = ExtResource("6_p57ef")
-region = Rect2(0, 180, 160, 90)
+region = Rect2(0, 630, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_264po"]
 atlas = ExtResource("6_p57ef")
-region = Rect2(0, 90, 160, 90)
+region = Rect2(0, 540, 160, 90)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1kice"]
+atlas = ExtResource("6_p57ef")
+region = Rect2(0, 450, 160, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5newe"]
+atlas = ExtResource("6_p57ef")
+region = Rect2(0, 360, 160, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37s47"]
+atlas = ExtResource("6_p57ef")
+region = Rect2(0, 270, 160, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bt5mj"]
+atlas = ExtResource("6_p57ef")
+region = Rect2(0, 180, 160, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e1j6l"]
+atlas = ExtResource("6_p57ef")
+region = Rect2(0, 90, 160, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pl11u"]
 atlas = ExtResource("6_p57ef")
 region = Rect2(0, 0, 160, 90)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5newe"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_u5sy4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gee14")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0tnpc")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vtaks")
 }, {
@@ -126,6 +165,18 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kvuet")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trtic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ir15t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ca42v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rysoc")
 }],
 "loop": false,
 "name": &"lower",
@@ -133,25 +184,28 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_trtic")
-}, {
-"duration": 2.0,
-"texture": SubResource("AtlasTexture_ir15t")
-}, {
-"duration": 1.5,
-"texture": SubResource("AtlasTexture_ca42v")
-}, {
-"duration": 1.3,
-"texture": SubResource("AtlasTexture_rysoc")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_ssvqc")
 }, {
-"duration": 1.2,
+"duration": 1.7,
 "texture": SubResource("AtlasTexture_264po")
 }, {
-"duration": 1.0,
+"duration": 1.5,
 "texture": SubResource("AtlasTexture_1kice")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_5newe")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_37s47")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_bt5mj")
+}, {
+"duration": 1.3,
+"texture": SubResource("AtlasTexture_e1j6l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pl11u")
 }],
 "loop": false,
 "name": &"raise",
@@ -163,6 +217,7 @@ background_mode = 3
 glow_enabled = true
 glow_levels/1 = 5.22
 glow_levels/3 = 0.64
+glow_normalized = true
 glow_intensity = 3.75
 glow_strength = 0.39
 glow_bloom = 0.1
@@ -224,14 +279,24 @@ offset_top = -18850.0
 offset_right = 45731.0
 offset_bottom = 21082.0
 mouse_filter = 2
-color = Color(0, 0, 0.101961, 1)
+color = Color(0.07718, 0.0629, 0.17, 1)
 
 [node name="GameScoreLabel" type="Label" parent="."]
+visible = false
 offset_left = -40.0
 offset_top = -32.0
 offset_right = -24.0
 offset_bottom = -19.0
 text = "0000"
+label_settings = SubResource("LabelSettings_0tnpc")
+
+[node name="MultiplierLabel" type="Label" parent="."]
+visible = false
+offset_left = -40.0
+offset_top = -25.0
+offset_right = -26.0
+offset_bottom = -12.0
+text = "x1.0"
 label_settings = SubResource("LabelSettings_0tnpc")
 
 [node name="HighScoreLabel" type="Label" parent="."]
@@ -243,6 +308,7 @@ text = "HIGH SCORE 9998"
 label_settings = SubResource("LabelSettings_0tnpc")
 
 [node name="InsertLabel" type="Label" parent="."]
+visible = false
 offset_left = -42.0
 offset_top = -16.0
 offset_right = 42.0
@@ -252,6 +318,7 @@ label_settings = SubResource("LabelSettings_0tnpc")
 horizontal_alignment = 1
 
 [node name="ReadyLabel" type="Label" parent="."]
+visible = false
 offset_left = -42.0
 offset_top = -16.0
 offset_right = 42.0
@@ -259,14 +326,6 @@ offset_bottom = 10.0
 text = "MOVE TO START"
 label_settings = SubResource("LabelSettings_0tnpc")
 horizontal_alignment = 1
-
-[node name="MultiplierLabel" type="Label" parent="."]
-offset_left = -40.0
-offset_top = -25.0
-offset_right = -26.0
-offset_bottom = -12.0
-text = "x1.0"
-label_settings = SubResource("LabelSettings_0tnpc")
 
 [node name="Shaders" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_vtaks")
@@ -278,19 +337,74 @@ pivot_offset = Vector2(-44, 6)
 mouse_filter = 2
 metadata/_edit_lock_ = true
 
+[node name="PickNumLabel" type="Label" parent="."]
+visible = false
+offset_left = -17.0
+offset_top = -26.0
+offset_right = 18.0
+text = "PICK 2"
+label_settings = SubResource("LabelSettings_kvpfn")
+horizontal_alignment = 1
+
+[node name="Darken" type="Sprite2D" parent="PickNumLabel"]
+show_behind_parent = true
+position = Vector2(17, 25)
+scale = Vector2(1.79688, 1)
+texture = SubResource("GradientTexture2D_kvpfn")
+
+[node name="PocketArrow" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(60, 32)
+texture = ExtResource("8_vtaks")
+
+[node name="PocketLabel" type="Label" parent="."]
+visible = false
+offset_left = 43.0
+offset_top = 3.0
+offset_right = 78.0
+offset_bottom = 29.0
+text = "CHECK
+POCKET"
+label_settings = SubResource("LabelSettings_kvpfn")
+horizontal_alignment = 1
+
+[node name="PocketButton" type="Button" parent="."]
+visible = false
+offset_left = 46.0
+offset_top = 6.0
+offset_right = 73.0
+offset_bottom = 42.0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vtaks")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_kvpfn")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_dinhu")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_kvuet")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_trtic")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_ir15t")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ca42v")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_rysoc")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_ssvqc")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_264po")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1kice")
+disabled = true
+flat = true
+
 [node name="TimerLabel" type="Label" parent="."]
 visible = false
-offset_left = 63.0
-offset_top = -29.0
-offset_right = 77.0
-offset_bottom = -16.0
+offset_left = 65.0
+offset_top = -25.0
+offset_right = 79.0
+offset_bottom = -12.0
 text = "1:00"
-label_settings = SubResource("LabelSettings_gee14")
+label_settings = SubResource("LabelSettings_vtaks")
+horizontal_alignment = 2
 
 [node name="Sign" type="AnimatedSprite2D" parent="."]
-visible = false
 sprite_frames = SubResource("SpriteFrames_5newe")
-animation = &"raise"
+animation = &"lower"
+frame = 7
+frame_progress = 1.0
 metadata/_edit_lock_ = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -320,4 +434,5 @@ animation = &"on_table"
 position = Vector2(19, 27)
 animation = &"on_table"
 
+[connection signal="pressed" from="PocketButton" to="." method="_on_pocket_button_pressed"]
 [connection signal="animation_finished" from="Sign" to="." method="_on_sign_animation_finished"]

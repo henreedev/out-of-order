@@ -2,7 +2,7 @@ extends AnimatedSprite2D
 
 class_name PlatformerCoin
 
-var score := 100
+var score := 50
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is Player:
